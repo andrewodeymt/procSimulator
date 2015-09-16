@@ -15,7 +15,8 @@ import java.util.Scanner;
 public class ProcSimulator {
     
     int m, n = 0;
-    int size = 1000;
+    float avgProcTime = 0;
+    int size = 2;
     int minPrTime = 1;
     int maxPrTime = 500;
     int minArrTime = 1;
@@ -25,61 +26,70 @@ public class ProcSimulator {
     Random r  = new Random();
     int gid;
     int procCount;
-    int totalProcTime1, totalProcTime2 = 0;
+    float totalProcTime1, totalProcTime2 = 0;
     
-   private int proc1(int arrTime, int procTime)
+   private float proc1(int arrTime, int procTime, int i)
    {
-       totalProcTime1 = (procTime-arrTime);
-       return totalProcTime1;
+       totalProcTime1 = (totalProcTime1+(procTime+arrTime));
        
        System.out.println("Proc 1 Start Time: "+arrTime+", End Time: "+procTime);
+       System.out.println("Total Processing time for Processor 1 in millieconds: "+totalProcTime1);
+       return totalProcTime1;
    }
    
-   private int proc2(int arrTime, int procTime)
+   private float proc2(int arrTime, int procTime, int i)
    {
-       totalProcTime2 = (procTime-arrTime);
+       totalProcTime2 = (totalProcTime2+ (procTime+arrTime));
+              
+       System.out.println("Proc 2 Start Time: "+arrTime+", End Time: "+procTime);
+       System.out.println("Total Processing time for Processor 2 in millieconds: "+totalProcTime2);
        return totalProcTime2;
    }    
     
-    //Constructor
-    public ProcSimulator()
-    {
-    
-        
-        //intro
-        System.out.println("Please enter your GID: ");
+   //Constructor
+   public ProcSimulator()
+   {    
+       //intro
+       System.out.println("Please enter your GID: ");
 
-        //scanner for user input
-        Scanner sc  = new Scanner(System.in);
-        gid = sc.nextInt();
-        procCount = ((gid%3)+2);
-    
-        System.out.println(procCount);
-    
-        //creating array of random nums
-        for(int i = 0; i < procTime.length; i++)
-        {
-            procTime[i]  = (int) (Math.random()*(maxPrTime - minPrTime)) + minPrTime;
-        }
-        //Arrays.sort(procTime);
-        //System.out.println(Arrays.toString(procTime));
-        
-        for(int j = 0; j < arrTime.length; j++)
-        {
-            arrTime[j] = j + 1;
-        }
-        //System.out.println(Arrays.toString(arrTime));    
-        
-        for(int x = 0; x < arrTime.length; x++)
-        {
-            if(x%2 == 0)
+       //scanner for user input
+       Scanner sc  = new Scanner(System.in);
+       gid = sc.nextInt();
+       procCount = ((gid%3)+2);
+   
+       System.out.println(procCount);
+   
+       //creating array of random nums
+       for(int i = 0; i < procTime.length; i++)
+       {
+           procTime[i]  = (int) (Math.random()*(maxPrTime - minPrTime)) + minPrTime;
+       }
+       //Arrays.sort(procTime);
+       //System.out.println(Arrays.toString(procTime));
+       
+       for(int j = 0; j < arrTime.length; j++)
+       {
+           arrTime[j] = j + 1;
+       }
+       //System.out.println(Arrays.toString(arrTime));    
+       
+       for(int i = 0; i <= 10; i++)
+       {
+            for(int x = 0; x < arrTime.length; x++)
             {
-                proc1(arrTime[x], procTime[x]);
+                if(x%2 == 0)
+                {
+                    proc1(arrTime[x], procTime[x], x);
+                }
+                else{
+                    proc2(arrTime[x], procTime[x], x);
+                }
             }
-            else{
-                proc2(arrTime[x], procTime[x]);
-            }
-        
+            
+            totalProcTime1 = totalProcTime1 / 100;
+            totalProcTime2 = totalProcTime2 / 100;
+            avgProcTime = totalProcTime1 + totalProcTime2;
         }
+        System.out.println("Average processing time on 100 times: "+avgProcTime);
     }
 }
